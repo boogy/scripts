@@ -3,7 +3,11 @@
 #
 import sys
 
-input = sys.argv[1]
+try:
+  input = sys.argv[1]
+except IndexError:
+  print "[-] You must supply a string to the script ...!"
+  sys.exit(1)
 
 # Reverse the string
 rev_input = input[::-1]
