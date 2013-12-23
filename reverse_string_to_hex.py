@@ -10,7 +10,7 @@ except IndexError:
 
 print "String lenght : " + str(len(input))
 
-stringList = [ input[i:i+4] for i in range(0, len(input), 4) ]
+strings = [ input[i:i+4] for i in range(0, len(input), 4) ]
 
-for item in stringList[::-1]:
+for item in strings[::-1]:
   print item[::-1] + ' : ' + "0x" + str(item[::-1].encode('hex'))
