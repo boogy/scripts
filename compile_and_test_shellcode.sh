@@ -3,15 +3,15 @@
 # and specify the architecture
 # that you want to compile'it for
 # Usage:
-# 
+#
 #  compile_and_test_shellcode.sh execve-shell 32
+#
 
 FILE=$1
 ARCH=$2
 SHELLCODE=""
 
-if test -z $ARCH
-then
+if test -z $ARCH ; then
   A=$(uname -p)
   case $A in
     "x86_64")
@@ -27,12 +27,10 @@ fi
 
 function compile()
 {
-  if echo $ARCH|egrep -qo "64"
-  then
+  if echo $ARCH|egrep -qo "64" ; then
     nasm -f elf64 $1.asm -o $1.o
     ld -o $1 $1.o    
-  elif echo $ARCH|egrep -qo "32"
-  then
+  elif echo $ARCH|egrep -qo "32" ; then
     nasm -f elf32 $1.asm -o $1.o
     ld -m elf_i386 $1.o -o $1
   fi
@@ -91,4 +89,5 @@ compile $FILE
 write_shellcode_c $FILE $SHELLCODE
 echo "[+] Files :"
 ls -l|egrep --color=auto ${c_file}
+
 #EOF
