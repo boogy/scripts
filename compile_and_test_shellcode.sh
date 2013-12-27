@@ -1,7 +1,6 @@
 #!/bin/bash
-# Give a .asm asembly file to compile 
-# and specify the architecture
-# that you want to compile'it for
+# Give it a .asm asembly file to compile and specify the architecture
+# that you want to compile'it for [32] or [64]
 # Usage:
 #
 #  compile_and_test_shellcode.sh execve-shell 32
