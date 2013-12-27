@@ -10,6 +10,21 @@ FILE=$1
 ARCH=$2
 SHELLCODE=""
 
+if test -z $ARCH
+then
+  A=$(uname -p)
+  case $A in
+    "x86_64")
+      ARCH=64;;
+    "i386")
+      ARCH=32;;
+    "i686")
+      ARCH=32;;
+    "*")
+      echo "Unsupported architecture"
+  esac
+fi
+
 function compile()
 {
   if echo $ARCH|egrep -qo "64"
@@ -26,8 +41,11 @@ function compile()
   tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g')
   
   echo
-  echo "[+] Shellcode:"
+  echo "[+] Multiline hellcode:"
   echo "$SHELLCODE" | grep -o -P "([0-9a-zA-Z\\\]){96}"|sed 's/^\\/\"\\/'|sed 's/.$/&\"/'
+  echo
+  echo "[+] One line shellcode:"
+  echo "$SHELLCODE"
   echo
 }
 
