@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Author : tuxgeek.org
+#
 # Give it a .asm asembly file to compile and specify the architecture
 # that you want to compile'it for [32] or [64]
 # Usage:
