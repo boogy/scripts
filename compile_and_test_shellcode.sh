@@ -42,13 +42,6 @@ $(echo ${s_code});
 
 int main()
 {
-  /*
-  int *ret;
-  printf("Shellcode Lenght: %d\n", strlen(shellcode));
-  ret = (int *)&ret + 2;
-  (*ret) = (int)shellcode;
-  */
-  
   printf("Shellcode Lenght: %d\n", strlen(shellcode));
   int (*ret)() = (int(*)())shellcode;
   ret();  
