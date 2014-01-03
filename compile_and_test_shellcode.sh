@@ -66,11 +66,9 @@ __EOF__
     
 }
 
-FILE=$1
-ARCH=$2
 SHELLCODE=""
 
-if test -z $ARCH ; then
+if test -z $2 ; then
   A=$(uname -p)
   case $A in
     "x86_64")
@@ -84,14 +82,8 @@ if test -z $ARCH ; then
   esac
 fi
 
-FILE_EXT="${FILE##*.}"
-FILE_NAME="${FILE%.*}"
-
-echo
-echo "Extension: .$FILE_EXT"
-echo "FILE NAME: $FILE_NAME"
-echo
-
+FILE_NAME="${1%.*}"
+FILE_EXT="${1##*.}"
 
 compile $FILE_NAME
 write_shellcode_c $FILE_NAME $SHELLCODE
