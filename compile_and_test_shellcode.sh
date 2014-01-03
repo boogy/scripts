@@ -1,9 +1,12 @@
 #!/bin/bash
+#
+# Author: Boogy
+#
 # Give it a .asm asembly file to compile and specify the architecture
 # that you want to compile'it for [32] or [64]
 # Usage:
 #
-#  compile_and_test_shellcode.sh execve-shell 32
+#  compile_and_test_shellcode.sh execve-shell.nasm 32
 #
 
 function compile()
