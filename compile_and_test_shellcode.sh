@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# Author : tuxgeek.org
-#
 # Give it a .asm asembly file to compile and specify the architecture
 # that you want to compile'it for [32] or [64]
 # Usage:
@@ -9,35 +6,17 @@
 #  compile_and_test_shellcode.sh execve-shell 32
 #
 
-FILE=$1
-ARCH=$2
-SHELLCODE=""
-
-if test -z $ARCH ; then
-  A=$(uname -p)
-  case $A in
-    "x86_64")
-      ARCH=64;;
-    "i386")
-      ARCH=32;;
-    "i686")
-      ARCH=32;;
-    "*")
-      echo "Unsupported architecture"
-  esac
-fi
-
 function compile()
 {
   if echo $ARCH|egrep -qo "64" ; then
-    nasm -f elf64 $1.asm -o $1.o
+    nasm -f elf64 ${FILE_NAME}.${FLE_EXT} -o $FILE_NAME.o
     ld -o $1 $1.o    
   elif echo $ARCH|egrep -qo "32" ; then
-    nasm -f elf32 $1.asm -o $1.o
-    ld -m elf_i386 $1.o -o $1
+    nasm -f elf32 ${FILE_NAME}.${FILE_EXT} -o $FILE_NAME.o
+    ld -m elf_i386 $FILE_NAME.o -o $FILE_NAME
   fi
   
-  SHELLCODE=$(objdump -d $1.o|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '| \
+  SHELLCODE=$(objdump -d $FILE_NAME.o|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '| \
   tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g')
   
   echo
@@ -58,8 +37,8 @@ function write_shellcode_c()
 #include <stdio.h>
 #include <string.h>
 
-char shellcode[] = \\
-$(echo ${2}|grep -o -P "([0-9a-zA-Z\\\]){96}"|sed 's/^\\/\"\\/'|sed 's/.$/&\"/');
+char shellcode[] = 
+$(echo ${2});
 
 int main()
 {
@@ -87,8 +66,35 @@ __EOF__
     
 }
 
-compile $FILE
-write_shellcode_c $FILE $SHELLCODE
+FILE=$1
+ARCH=$2
+SHELLCODE=""
+
+if test -z $ARCH ; then
+  A=$(uname -p)
+  case $A in
+    "x86_64")
+      ARCH=64;;
+    "i386")
+      ARCH=32;;
+    "i686")
+      ARCH=32;;
+    "*")
+      echo "Unsupported architecture"
+  esac
+fi
+
+FILE_EXT="${FILE##*.}"
+FILE_NAME="${FILE%.*}"
+
+echo
+echo "Extension: .$FILE_EXT"
+echo "FILE NAME: $FILE_NAME"
+echo
+
+
+compile $FILE_NAME
+write_shellcode_c $FILE_NAME $SHELLCODE
 echo "[+] Files :"
 ls -l|egrep --color=auto ${c_file}
 
