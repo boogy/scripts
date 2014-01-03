@@ -38,7 +38,7 @@ function write_shellcode_c()
 #include <string.h>
 
 char shellcode[] = 
-$(echo ${2});
+$(echo ${s_code});
 
 int main()
 {
