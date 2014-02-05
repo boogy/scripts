@@ -22,13 +22,13 @@ def ip2hex1(ip):
     return hexIP
 
 def ip2hex2(ip):
-  return "\\x" + "\\x".join(map(lambda x: hex(int(x))[2:].zfill(2), ip.split(".")))
+  return "0x" + "".join(map(lambda x: hex(int(x))[2:].zfill(2), ip.split(".")[::-1]))
 
 def ip2hex3(ip):
   return "\\x" + "\\x".join(map(lambda x: "%02x" % int(x), ip.split(".")))
 
 def main():
-  print ip2hex0(sys.argv[1])
+  #print ip2hex0(sys.argv[1])
   print ip2hex1(sys.argv[1])
   print ip2hex2(sys.argv[1])
   print ip2hex3(sys.argv[1])
