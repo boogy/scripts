@@ -14,13 +14,17 @@ def ip2hex(ip):
         print "Hex non reverse: %s\t\t(%s)" % (hex_nreverse, hex2ip(hex_nreverse.replace('0x','')))
         print "Hex in opcodes : %s\t(%s)\n" % (hex_opcodes, opt.ip)
     except ValueError as e:
-        print "[-] You probably gave a bad value: %s" % e
+        print "[-] You probably gave a bad value !"
+        print "[-] ERROR: %s" % e
+        sys.exit(2)
 
 def hex2ip(ip):
     try:
         return '.'.join(str(int(i, 16)) for i in reversed([ip[i:i+2] for i in range(0, len(ip), 2)]))
     except ValueError as e:
-        print "[-] You probably gave a bad value: %s" % e
+        print "[-] You probably gave a bad value !"
+        print "[-] ERROR: %s" % e
+        sys.exit(2)
 
 
 if __name__ == "__main__":
