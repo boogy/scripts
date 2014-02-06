@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
+#
+# Convert ip, port to hex and back to text
+#
 
 import sys
 import argparse
@@ -9,11 +12,12 @@ def ip2hex(ip):
         hex_reverse  = "0x" + "".join(map(lambda x: hex(int(x))[2:].zfill(2), ip.split(".")))
         hex_nreverse = "0x" + "".join(map(lambda x: hex(int(x))[2:].zfill(2), ip.split(".")[::-1]))
         hex_opcodes  = "".join(map(lambda x: "\\x%02x" % int(x), ip.split(".")))
-        print "\nHex reverse    : %s\t\t(%s)" % (hex_reverse, hex2ip(hex_reverse.replace('0x', '')))
+        print "== IP =="
+        print "Hex reverse    : %s\t\t(%s)" % (hex_reverse, hex2ip(hex_reverse.replace('0x', '')))
         print "Hex non reverse: %s\t\t(%s)" % (hex_nreverse, hex2ip(hex_nreverse.replace('0x','')))
-        print "Hex in opcodes : %s\t(%s)\n" % (hex_opcodes, opt.ip)
+        print "Hex opcodes    : %s\t(%s)" % (hex_opcodes, opt.ip)
     except ValueError as e:
-        print "[-] You probably gave a bad value !"
+        print "\n[-] You probably gave a bad value for the IP !"
         print "[-] ERROR: %s" % e
         sys.exit(2)
 
@@ -22,21 +26,29 @@ def hex2ip(ip):
     try:
         return '.'.join(str(int(i, 16)) for i in reversed([ip[i:i+2] for i in range(0, len(ip), 2)]))
     except ValueError as e:
-        print "[-] You probably gave a bad value !"
+        print "\n[-] You probably gave a bad value for the IP !"
         print "[-] ERROR: %s" % e
         sys.exit(2)
 
 
 def port2hex(port):
     try:
-        port_hex = hex(int(port)).replace("0x", "")
-        port_hex_op = [ port_hex[i:i+2] for i in range(0, len(port_hex), 2) ]
-        port_hex_op =  "".join("\\x" + x for x in port_hex_op)
+        port_hex     = hex(int(port)).replace("0x", "")
+        port_hex_op  = [ port_hex[i:i+2] for i in range(0, len(port_hex), 2) ]
+        port_hex_op  =  "".join("\\x" + x for x in port_hex_op)
     except ValueError as e:
-        print "[-] You probably gave a bad value !"
+        print "\n[-] You probably gave a bad value for the port!"
         print "[-] ERROR: %s" % e
         sys.exit(2)
-    return ( port_hex_op, port_hex )
+    return ( port_hex_op, port_hex)
+
+def hex2port(port):
+    try:
+        return int(str(port), 16)
+    except ValueError as e:
+        print "\n[-] You probably gave a bad value for the port !"
+        print "[-] ERROR: %s" % e
+        sys.exit(2)
 
 if __name__ == "__main__":
     desc  = "Convert ip to hex and back to text"
@@ -51,15 +63,24 @@ if __name__ == "__main__":
         parser.print_help()
         sys.exit(1)
 
+    if opt.hex and opt.text:
+        print "[-] You can't use hex and text options in the same time"
+        print "[-] Use -x or -t serapately"
+        sys.exit(1)
+
     if opt.hex and opt.ip:
         ip2hex(opt.ip)
 
-    if opt.text and opt.ip:
-        print "\nIP: %s\n" % hex2ip(opt.ip)
+    if opt.ip and opt.text:
+        print "IP  : %s" % hex2ip(opt.ip)
 
-    if opt.port:
+    if opt.port and opt.text:
+        print "PORT: %s" % hex2port(opt.port)
+
+    if opt.port and opt.hex:
         port_hex_op, port_hex = port2hex(opt.port)
-        print "\nHex reverse: 0x%s" % port_hex
-        print "Hex opcodes: %s\n" % port_hex_op
+        print "== PORT =="
+        print "Hex string  : 0x%s\t(%s)" % (port_hex, opt.port)
+        print "Hex opcodes : %s\t(%s)"   % (port_hex_op, opt.port)
 
 #EOF
