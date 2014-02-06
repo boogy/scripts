@@ -64,7 +64,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if opt.hex and opt.text:
-        print "[-] You can't use hex and text options in the same time"
+        print "[-] You can't use hex and text options at the same time"
         print "[-] Use -x or -t serapately"
         sys.exit(1)
 
