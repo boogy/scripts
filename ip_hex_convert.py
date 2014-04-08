@@ -7,6 +7,10 @@
 import sys
 import argparse
 
+
+def to_hex(s):
+    return " ".join("0x" + "{0:x}".format(ord(c)).zfill(2) for c in s) # <-- Python 3 is OK
+
 def ip2hex(ip):
     try:
         hex_reverse  = "0x" + "".join(map(lambda x: hex(int(x))[2:].zfill(2), ip.split(".")))
