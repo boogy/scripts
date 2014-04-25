@@ -1,17 +1,24 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
 import sys
 
+my_addr = list()
+
 try:
-  input = sys.argv[1].replace('0x', '')
+    for item in sys.argv:
+        my_addr.append(item.replace("0x", ""))
+    my_addr.pop(0)
 except IndexError:
-  print "[-] You must supply a string to the script ...!"
-  sys.exit(1)
+    print "[-] You must supply a string to the script ...!"
+    sys.exit(1)
 
-#print "String lenght " + str(len(input))
+for item in my_addr:
+    if len(str(item)) > 8:
+        item = item[:-1]
 
-s = [ input[i:i+2] for i in range(0, len(input), 2) ]
+    s = [ item[i:i+2] for i in range(0, len(item), 2) ]
 
-for item in s[::-1]:
-	sys.stdout.write("\\x" + item)
+    for a in s[::-1]:
+        sys.stdout.write("\\x" + a.lower())
+        sys.stdout.flush()
+    print
