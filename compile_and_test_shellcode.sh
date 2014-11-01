@@ -45,10 +45,6 @@ $(echo ${s_code});
 
 int main()
 {
-  /*
-  fprintf(stdout,"Lenght: %d\n",strlen(shellcode));
-  (*(void  (*)()) shellcode)();
-  */
   printf("Shellcode Lenght: %d\n", strlen(shellcode));
   int (*ret)() = (int(*)())shellcode;
   ret();  
