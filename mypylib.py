@@ -37,3 +37,19 @@ def threaded(f, daemon=True):
         t.result_queue = q
         return t
     return wrap
+
+def parseCfg(cfg, section):
+    """Get the data from the config file and return a dictionary"""
+    dict1 = {}
+    Config = ConfigParser.ConfigParser()
+    Config.read(cfg)
+    options = Config.options(section)
+    for option in options:
+        try:
+            dict1[option] = Config.get(section, option)
+            if dict1[option] == -1:
+                DebugPrint("skip: %s" % option)
+        except:
+            print >> sys.stderr, "exception on %s!" % option
+            dict1[option] = None
+    return dict1
