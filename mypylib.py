@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 #
 # A python file with useful functions to be able
-# to find them fast when needed
+# to find them as fast as possible when needed
 #
 from __future__ import print_function
 import os
