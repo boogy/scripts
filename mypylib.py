@@ -9,8 +9,10 @@ import os
 import re
 import sys
 import time
+import select
 import pprint
 import struct
+import capstone
 import subprocess
 
 
@@ -432,3 +434,36 @@ def xor(s1, s2):
  
 def xor_strings(xs, ys):
     return "".join(chr(ord(x) ^ ord(y)) for x, y in zip(xs, ys))
+
+
+def contains_not(x, bad):
+    return not any(c in bad for c in x)
+
+
+def contains_only(x, good):
+    return all(c in good for c in x)
+
+
+def capstone_dump(code, arch=capstone.CS_ARCH_X86, mode=capstone.CS_MODE_32, cols="abm"):
+    md = capstone.Cs(arch, mode)
+    for i in md.disasm(code, 0x1000):
+        line = ""
+        if "a" in cols:
+            line += "0x%04x: " % i.address
+    if "b" in cols:
+        line += "%-20s " % " ".join("%02x" % x for x in i.bytes)
+    if "m" in cols:
+        line += "%s %s" % (i.mnemonic, i.op_str)
+    print line
+
+def x86_disas(code, **kw):
+    capstone_dump(code, capstone.CS_ARCH_X86, capstone.CS_MODE_32, **kw)
+
+
+def x86_64_disas(code, **kw):
+    capstone_dump(code, capstone.CS_ARCH_X86, capstone.CS_MODE_64, **kw)
+
+
+def can_read(s, timeout=0):
+    x,_,_ = select.select([s], [], [], timeout)
+    return x != []
