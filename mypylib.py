@@ -15,6 +15,7 @@ import struct
 import capstone
 import subprocess
 import itertools
+import collection
 
 
 def chunks(l, n):
@@ -485,3 +486,9 @@ def flatten(nested_list):
     :returns: a list object
     """
     return list(itertools.chain(*nested_list))
+
+def word_counter(*words):
+	'''Write a Python program that inputs a list of words, separated by white-
+	space, and outputs how many times each word appears in the list.
+	'''
+	return dict(collections.Counter(words).items())
