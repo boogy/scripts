@@ -467,3 +467,20 @@ def x86_64_disas(code, **kw):
 def can_read(s, timeout=0):
     x,_,_ = select.select([s], [], [], timeout)
     return x != []
+
+def flatten(nested_list):
+    """Dismount a nested list in one simples list
+    >>> flatten([[1,2,3], [4,5,6], [7,8,9]])
+    [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+    It works with a map too:
+    >>> flatten(map(lambda x: [x], range(10)))
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+    similar to:
+    return [item for sublist in nested_list for item in sublist]
+    
+    :nested_list: a list object with another lists as elements
+    :returns: a list object
+    """
+    return list(itertools.chain(*nested_list))
