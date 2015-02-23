@@ -332,10 +332,15 @@ def convert_hex_to_ascii(h):
     return ''.join(chars_in_reverse)
 
 
-def get_interfaces():
-    """Gets all (interface, IPv4) of the local system."""
-    d = subprocess.check_output('ip -4 -o addr', shell=True)
-    ifs = re.findall(r'^\S+:\s+(\S+)\s+inet\s+([^\s/]+)', d, re.MULTILINE)
+def get_interfaces(family=4):
+    """Gets all (interface, IPv4) of the local system.
+    :family
+    	- 4 => shortcut for -family inet
+    	- 6 => shortcut for -family inet6
+    	- 4 => shortcut for -family link
+    """
+    d = subprocess.check_output('ip -%s -o addr' % str(family), shell=True)
+    ifs = re.findall(r'^\S+:\s+(\S+)\s+inet[6]?\s+([^\s/]+)', d, re.MULTILINE)
     return [i for i in ifs if i[0] != 'lo']
 
 
