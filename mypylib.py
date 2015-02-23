@@ -14,6 +14,7 @@ import pprint
 import struct
 import capstone
 import subprocess
+import itertools
 
 
 def chunks(l, n):
