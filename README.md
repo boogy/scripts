@@ -1,6 +1,4 @@
 scripts
 ========
 
-Some scripts I use ...
-
-www.tuxgeek.org
+Some scripts I use or used ...
